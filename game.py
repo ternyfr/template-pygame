@@ -22,16 +22,35 @@ running = True
 red = 0
 green = 0
 blue = 0
+isredmax = False
+isgr = False
+isbl = False
+
+y = 0
+
 while running:
     clock.tick(FPS)
     screen.fill((red, green, blue))
-    
-    green = green+1
-    if green == 255:
-        green = 0
-    red = red+1
-    if red == 255:
-        red = 0
+    if isgr == True:
+        blue = blue + 1
+        if blue == 255:
+            blue = 0
+            ifbl = True
+    else:
+        if isredmax == True:
+            green = green + 1
+            if green == 255:
+                green = 0
+                isgr = True
+        else:
+            red = red+1
+        if red == 255:
+            red = 0
+            isredmax = True
+
+    pygame.draw.rect(screen, (100,50,200), [0, y, 100, 200])
+    y = y+0.1
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
