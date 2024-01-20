@@ -1,5 +1,6 @@
-import pygame
 import random
+import time
+import pygame
 
 WIDTH = 360
 HEIGHT = 480
@@ -27,33 +28,51 @@ isgr = False
 isbl = False
 
 y = 0
-
+x = 0
+colorap = (255, 150, 100)
+xap = 0
+yap = 0
+#460 340
 while running:
     clock.tick(FPS)
     screen.fill((red, green, blue))
-    if isgr == True:
-        blue = blue + 1
-        if blue == 255:
-            blue = 0
-            ifbl = True
-    else:
-        if isredmax == True:
-            green = green + 1
-            if green == 255:
-                green = 0
-                isgr = True
-        else:
-            red = red+1
-        if red == 255:
-            red = 0
-            isredmax = True
+    # if isgr == True:
+    #     blue = blue + 1
+    #     if blue == 255:
+    #         blue = 0
+    #         ifbl = True
+    # else:
+    #     if isredmax == True:
+    #         green = green + 1
+    #         if green == 255:
+    #             green = 0
+    #             isgr = True
+    #     else:
+    #         red = red+1
+    #     if red == 255:
+    #         red = 0
+    #         isredmax = True
 
-    pygame.draw.rect(screen, (100,50,200), [0, y, 100, 200])
-    y = y+0.1
-
+    #проверка нажатия на клавиши движения
+    pygame.draw.rect(screen, (100,50,200), [x, y, 25, 25])
+    pygame.draw.circle(screen, (colorap), [xap, yap], 10)
     for event in pygame.event.get():
+            
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                y = y - 10
+            if event.key == pygame.K_a:
+                x = x - 10
+            if event.key == pygame.K_s:
+                y = y + 10
+                print(y)
+            if event.key == pygame.K_d:
+                x = x + 10
+                print(x)
+            if event.key == pygame.K_SPACE:
+                print("space nachal")
     pygame.display.flip()
         
 pygame.quit()
