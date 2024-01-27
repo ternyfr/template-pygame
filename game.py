@@ -2,16 +2,17 @@ import random
 import time
 import pygame
 
+# переменные с размерами экрана и фпс
 WIDTH = 360
 HEIGHT = 480
 FPS = 30
-
+# цвета
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-
+# игру и экран делаем
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -19,60 +20,58 @@ screen.fill(WHITE)
 pygame.display.set_caption("my game")
 clock = pygame.time.Clock()
 
+# запускаем 
 running = True
-red = 0
-green = 0
-blue = 0
-isredmax = False
-isgr = False
-isbl = False
 
+# цвет экрана
+screencolor = (0, 0, 0)
+
+# координаты и цвет яблочка
 y = 0
 x = 0
 colorap = (255, 150, 100)
-xap = 0
-yap = 0
-#460 340
+xap = 100
+yap = 200
+width = 50
+height = 25
+# держими всё в цикле на норм скорости
 while running:
     clock.tick(FPS)
-    screen.fill((red, green, blue))
-    # if isgr == True:
-    #     blue = blue + 1
-    #     if blue == 255:
-    #         blue = 0
-    #         ifbl = True
-    # else:
-    #     if isredmax == True:
-    #         green = green + 1
-    #         if green == 255:
-    #             green = 0
-    #             isgr = True
-    #     else:
-    #         red = red+1
-    #     if red == 255:
-    #         red = 0
-    #         isredmax = True
-
-    #проверка нажатия на клавиши движения
-    pygame.draw.rect(screen, (100,50,200), [x, y, 25, 25])
-    pygame.draw.circle(screen, (colorap), [xap, yap], 10)
+    # цветом заполняем
+    screen.fill(screencolor)
+    # рисуем фигуры
+    pygame.draw.rect(screen, (100,50,200), [x, y, width, height])
+    # 15 это радиус.
+    pygame.draw.circle(screen, (colorap), [xap, yap], 15)
+    # проверяем столкновение с яблоком
+    if ((x < xap+15 and xap-15 < x+ width) and (y < yap+15 and yap-15 < y+ height)):
+        xap = random.randint(0, 340)
+        yap = random.randint(0, 460)
+        pygame.draw.circle(screen, (colorap), [xap, yap], 15)
+        width = width+10
+        pygame.draw.rect(screen, (100,50,200), [x, y, width, height])  
+    # кнопки
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        y = y - 10
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_s]:
+        y = y + 10
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_a]:
+        x = x - 10
+    if keys[pygame.K_d]:
+        x = x + 10
+    # проверяем столковение с границами
+    if (x<0 or x > WIDTH - width):
+        running = False
+    # проверяем нажатие на крестик
     for event in pygame.event.get():
             
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w:
-                y = y - 10
-            if event.key == pygame.K_a:
-                x = x - 10
-            if event.key == pygame.K_s:
-                y = y + 10
-                print(y)
-            if event.key == pygame.K_d:
-                x = x + 10
-                print(x)
-            if event.key == pygame.K_SPACE:
-                print("space nachal")
+        
+    
     pygame.display.flip()
         
 pygame.quit()
