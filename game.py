@@ -3,8 +3,8 @@ import time
 import pygame
 
 # переменные с размерами экрана и фпс
-WIDTH = 360
-HEIGHT = 480
+WIDTH = 800
+HEIGHT = 700
 FPS = 30
 # цвета
 WHITE = (255, 255, 255)
@@ -34,34 +34,52 @@ xap = 100
 yap = 200
 width = 50
 height = 25
+
+img = pygame.image.load("./sunny.png")
+scale = pygame.transform.scale(img, (img.get_width(),img.get_height()))
+scale_rect = scale.get_rect(center=(WIDTH//2,HEIGHT//2))
+
+
+omori_img = pygame.image.load("./omori.png")
+scale_omori = pygame.transform.scale(omori_img, (64,64))
+omori_rect = scale_omori.get_rect()
+omori_rect.center = 100,100
+
+
+# pygame.time.wait(5000)
+
 # держими всё в цикле на норм скорости
 while running:
     clock.tick(FPS)
     # цветом заполняем
     screen.fill(screencolor)
+    screen.blit(scale, scale_rect)
+    screen.blit(scale_omori, omori_rect)
     # рисуем фигуры
     pygame.draw.rect(screen, (100,50,200), [x, y, width, height])
     # 15 это радиус.
     pygame.draw.circle(screen, (colorap), [xap, yap], 15)
     # проверяем столкновение с яблоком
     if ((x < xap+15 and xap-15 < x+ width) and (y < yap+15 and yap-15 < y+ height)):
-        xap = random.randint(0, 340)
-        yap = random.randint(0, 460)
-        pygame.draw.circle(screen, (colorap), [xap, yap], 15)
         width = width+10
+        xap = random.randint(0, WIDTH)
+        yap = random.randint(0, HEIGHT)
+        scale_rect.center = xap, yap
+        pygame.draw.circle(screen, (colorap), [xap, yap], 15)
+        
         pygame.draw.rect(screen, (100,50,200), [x, y, width, height])  
     # кнопки
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        y = y - 10
+        y = y - 15
     keys = pygame.key.get_pressed()
     if keys[pygame.K_s]:
-        y = y + 10
+        y = y + 15
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
-        x = x - 10
+        x = x - 15
     if keys[pygame.K_d]:
-        x = x + 10
+        x = x + 15
     # проверяем столковение с границами
     if (x<0 or x > WIDTH - width):
         running = False
