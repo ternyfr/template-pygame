@@ -4,7 +4,7 @@ import pygame
 
 # переменные с размерами экрана и фпс
 WIDTH = 800
-HEIGHT = 700
+HEIGHT = 800
 FPS = 30
 # цвета
 WHITE = (255, 255, 255)
@@ -45,6 +45,11 @@ scale_omori = pygame.transform.scale(omori_img, (64,64))
 omori_rect = scale_omori.get_rect()
 omori_rect.center = 100,100
 
+font_style = pygame.font.SysFont("Times New Roman", 25)
+fs = pygame.font.SysFont("Times New Roman", 100)
+och = 0
+msg = font_style.render(f"score: {och}", True, (200, 100, 100),(100, 40 ,200))
+go = fs.render("ГЕЙМ ОВЕР", True, (255, 255, 255))
 
 # pygame.time.wait(5000)
 
@@ -55,12 +60,16 @@ while running:
     screen.fill(screencolor)
     screen.blit(scale, scale_rect)
     screen.blit(scale_omori, omori_rect)
+    screen.blit(msg, [20,20])
+
     # рисуем фигуры
     pygame.draw.rect(screen, (100,50,200), [x, y, width, height])
     # 15 это радиус.
     pygame.draw.circle(screen, (colorap), [xap, yap], 15)
     # проверяем столкновение с яблоком
     if ((x < xap+15 and xap-15 < x+ width) and (y < yap+15 and yap-15 < y+ height)):
+        och = och+1
+        msg = font_style.render(f"score: {och}", True, (200, 100, 100),(100, 40 ,200))
         width = width+10
         xap = random.randint(0, WIDTH)
         yap = random.randint(0, HEIGHT)
@@ -82,14 +91,20 @@ while running:
         x = x + 15
     # проверяем столковение с границами
     if (x<0 or x > WIDTH - width):
+        screen.blit(go, [100, 200])
+        pygame.display.flip()
+        pygame.time.wait(5000)
         running = False
+        
+        
     # проверяем нажатие на крестик
     for event in pygame.event.get():
             
         if event.type == pygame.QUIT:
             running = False
-        
+
     
     pygame.display.flip()
+
         
 pygame.quit()
